@@ -10,7 +10,7 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
             margin: 0; 
             padding: 40px 20px; 
-            background-color: #0f172a;
+            background-color: #0f172a; 
             color: #e2e8f0;
             display: flex; 
             justify-content: center;
@@ -20,7 +20,7 @@
 
         .app-container {
             display: flex;
-            flex-wrap: wrap;
+            flex-wrap: wrap; 
             gap: 50px;
             max-width: 1300px;
             width: 100%;
@@ -34,7 +34,7 @@
             display: flex; 
             flex-direction: column; 
             gap: 20px; 
-            background: #1e293b;
+            background: #1e293b; 
             padding: 30px; 
             border-radius: 12px; 
             box-shadow: 0 10px 25px rgba(0,0,0,0.5); 
@@ -102,7 +102,7 @@
             letter-spacing: 1px;
             transition: all 0.3s ease; 
             width: 100%; 
-            max-width: 800px;
+            max-width: 800px; 
             box-shadow: 0 4px 15px rgba(37, 99, 235, 0.4);
         }
 
@@ -114,7 +114,6 @@
 
         button:active { transform: translateY(0); }
         button:disabled { background: #475569; cursor: not-allowed; transform: none; box-shadow: none; }
-
         #business-card {
             width: 800px; 
             height: 440px; 
@@ -124,11 +123,33 @@
             position: relative; 
             overflow: hidden; 
             background-color: #ffffff; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-            border-radius: 10px;
-            transition: background-image 0.3s ease-in-out;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            border-radius: 10px; 
+            transition: background-image 0.3s ease-in-out, background-color 0.3s ease;
         }
 
+        .template-none {
+            background-color: #1e293b !important;
+            border: 2px dashed #475569;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: none !important;
+        }
+
+        .template-none::after {
+            content: 'Lütfen önizleme için sol menüden bir şablon seçiniz.';
+            color: #94a3b8;
+            font-size: 20px;
+            letter-spacing: 1px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .template-none #preview-identity,
+        .template-none #preview-contact {
+            display: none;
+        }
+
+        /* Mevcut Şablonlar */
         .template-1 { background-image: url('template1.png'); background-color: #e2e8f0; } 
         .template-2 { background-image: url('template2.png'); background-color: #e2e8f0; }
         .template-3 { background-image: url('template3.png'); background-color: #e2e8f0; }
@@ -174,12 +195,11 @@
 
         #preview-cell, #preview-email { font-size: 22px; font-weight: normal; }
 
-        /* Mobile */
         @media (max-width: 900px) {
             #business-card {
                 transform: scale(0.45);
                 transform-origin: top center;
-                margin-bottom: -240px;
+                margin-bottom: -240px; 
             }
             button { margin-top: 20px; }
         }
@@ -195,6 +215,7 @@
             <div class="input-group">
                 <label>Şablon Seçimi</label>
                 <select id="template-selector">
+                    <option value="template-none" selected disabled>Lütfen Bir Şablon Seçiniz...</option>
                     <option value="template-1">K9 Platoon</option>
                     <option value="template-2">C Platoon</option>
                     <option value="template-3">D Platoon</option>
@@ -218,12 +239,12 @@
 
             <div class="input-group">
                 <label>E-posta Adresi</label>
-                <input type="text" id="input-email" placeholder="Örn: serino@lspd.online">
+                <input type="text" id="input-email" placeholder="Örn: isim@lspdonline.org">
             </div>
         </div>
 
         <div class="preview-section">
-            <div id="business-card" class="template-1">
+            <div id="business-card" class="template-none">
                 <div id="preview-identity">
                     <div id="preview-name" class="smooth-text"></div>
                     <div id="preview-title" class="smooth-text"></div>
@@ -269,6 +290,12 @@
         inputEmail.addEventListener('input', (e) => previewEmail.textContent = e.target.value);
 
         function downloadCard() {
+            // Şablon seçilmemişse indirmeyi engelle
+            if (businessCard.classList.contains('template-none')) {
+                alert("Lütfen indirme işleminden önce menüden bir kartvizit şablonu seçiniz.");
+                return;
+            }
+
             const originalText = downloadBtn.textContent;
             downloadBtn.textContent = "SİSTEM İŞLİYOR...";
             downloadBtn.disabled = true;
